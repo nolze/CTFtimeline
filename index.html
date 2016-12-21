@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>CTF historical timeline -2016</title>
+<link rel="stylesheet" type="text/css" href="assets/vis-timeline-graph2d.min.css">
+<style>
+body {
+  font-family: Arial, sans-serif;
+  font-size: 6pt;
+}
+#visualization {
+  box-sizing: border-box;
+  width: 100%;
+}
+.vis-item .vis-item-content {
+  padding: 1px;
+}
+</style>
+</head>
+<body>
+<h1>CTF historical timeline -2016</h1>
+<p><a href="http://www.tsg.ne.jp/nolze/CTFtimeline2016.html">http://www.tsg.ne.jp/nolze/blog/CTFtimeline2016.html</a> — data from <a href="https://ctftime.org/">CTFtime</a>. GitHub: <a href="https://github.com/nolze/CTFtimeline/">https://github.com/nolze/CTFtimeline/</a></p>
+<div id="visualization" autofocus="autofocus"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="assets/vis.min.js"></script>
+<script>
+$.when($.getJSON('data/groups.json'), $.getJSON('data/events.json'))
+.done(function (groups_res, events_res) {
+  var groups = new vis.DataSet(groups_res[0])
+  var items = new vis.DataSet(events_res[0])
+  var container = document.getElementById('visualization')
+  var options = {
+    groupOrder: function (a, b) {
+      return b.counts - a.counts
+    },
+    horizontalScroll: true,
+    verticalScroll: true,
+    editable: false,
+    zoomable: false,
+    moveable: false,
+    clickToUse: true,
+    // maxHeight: 300,
+    orientation: {axis: 'top', item: 'top'},
+    // stack: false,
+    type: 'point',
+    timeAxis: {scale: 'year', step: 1},
+    //start: new Date(2000, 1, 1),
+    end: new Date(2018, 7, 1),
+    showMajorLabels: false,
+    format: {
+      minorLabels: {
+        millisecond:'YYYY',
+        second:     'YYYY',
+        minute:     'YYYY',
+        hour:       'YYYY',
+        weekday:    'YYYY',
+        day:        'YYYY',
+        month:      'YYYY',
+        year:       'YYYY'
+      },
+      majorLabels: {
+        millisecond:'YYYY',
+        second:     'YYYY',
+        minute:     'YYYY',
+        hour:       'YYYY',
+        weekday:    'YYYY',
+        day:        'YYYY',
+        month:      'YYYY',
+        year:       'YYYY'
+      }
+    }
+  }
+  var timeline = new vis.Timeline(container, null, options)
+  timeline.setGroups(groups)
+  timeline.setItems(items)
+})
+</script>
+</body>
+</html>
